@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>منيو QR للمطاعم — يشتغل بدون انترنت</title>
+<title>منيو QR للمطاعم</title>
 <meta name="description" content="نظام منيو QR و طلبات للمطاعم، يشتغل كامل على جوال المطعم بدون سيرفر و بدون انترنت.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -145,6 +145,18 @@
   .buy .btn-main{background:#fff; color:var(--accent)}
 
   footer{padding:2.5rem 0 3.5rem; color:var(--muted); font-size:.88rem; text-align:center}
+
+  /* Keyboard focus, which had no visible state at all: every control here
+     is a button or a link, and without this a visitor tabbing through the
+     page cannot see where they are. */
+  :where(a,button):focus-visible{
+    outline:3px solid var(--accent); outline-offset:3px; border-radius:8px;
+  }
+  .buy .btn-main:focus-visible{outline-color:#fff}
+
+  @media (prefers-reduced-motion:reduce){
+    *{scroll-behavior:auto !important}
+  }
 
   [hidden]{display:none !important}
   :lang(en){letter-spacing:0}
