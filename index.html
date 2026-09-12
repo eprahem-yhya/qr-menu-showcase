@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>منيو QR للمطاعم — يشتغل بدون انترنت</title>
+<meta name="description" content="نظام منيو QR و طلبات للمطاعم، يشتغل كامل على جوال المطعم بدون سيرفر و بدون انترنت.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#faf7f2; --surface:#fff; --ink:#14110e; --muted:#6b6259;
+    --accent:#a8441a; --accent-soft:#f4e7de; --line:#e8ddd2;
+    --ok:#2f7d52;
+    --radius:18px;
+    --shell:1180px;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"Cairo",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    line-height:1.7;
+  }
+  .wrap{max-width:var(--shell); margin:0 auto; padding:0 1.25rem}
+  a{color:inherit}
+
+  /* ---------------------------------------------------------- top bar */
+  header.bar{
+    position:sticky; top:0; z-index:20;
+    background:rgba(250,247,242,.92); backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .bar .wrap{display:flex; align-items:center; gap:1rem; height:64px}
+  .brand{display:flex; align-items:center; gap:.6rem; font-weight:800}
+  .brand .mark{
+    width:34px; height:34px; border-radius:10px; background:var(--accent);
+    color:#fff; display:grid; place-items:center; font-size:1rem;
+  }
+  .bar .spacer{flex:1}
+  .langs{display:flex; border:1px solid var(--line); border-radius:999px; overflow:hidden}
+  .langs button{
+    border:0; background:var(--surface); color:var(--muted);
+    padding:.35rem .85rem; font:inherit; font-size:.85rem; cursor:pointer;
+  }
+  .langs button[aria-pressed="true"]{background:var(--accent); color:#fff}
+
+  /* ------------------------------------------------------------- hero */
+  .hero{padding:clamp(2.5rem,6vw,4.5rem) 0 1.5rem}
+  .hero h1{
+    font-size:clamp(1.9rem,4.6vw,3.1rem); line-height:1.25; margin:0 0 .75rem;
+    letter-spacing:-.02em;
+  }
+  .hero p.lede{font-size:clamp(1rem,2.1vw,1.2rem); color:var(--muted); max-width:56ch; margin:0 0 1.5rem}
+  .cta{display:flex; flex-wrap:wrap; gap:.7rem; align-items:center}
+  .btn{
+    display:inline-flex; align-items:center; gap:.5rem; text-decoration:none;
+    padding:.8rem 1.3rem; border-radius:999px; font-weight:600; font-size:.98rem;
+    border:1px solid transparent;
+  }
+  .btn-main{background:var(--accent); color:#fff}
+  .btn-ghost{background:var(--surface); border-color:var(--line); color:var(--ink)}
+  .tagline{display:flex; flex-wrap:wrap; gap:.5rem; margin-top:1.4rem}
+  .pill{
+    background:var(--accent-soft); color:var(--accent); border-radius:999px;
+    padding:.3rem .8rem; font-size:.83rem; font-weight:600;
+  }
+
+  /* ------------------------------------------------------ the viewer */
+  section{padding:clamp(2rem,5vw,3.5rem) 0}
+  h2{font-size:clamp(1.35rem,3vw,1.9rem); margin:0 0 .4rem}
+  .sub{color:var(--muted); margin:0 0 1.75rem; max-width:62ch}
+
+  /* Mobile: one view at a time, switched from the top. Desktop: both. */
+  .switch{display:flex; gap:.5rem; margin-bottom:1.25rem}
+  .switch button{
+    flex:1; border:1px solid var(--line); background:var(--surface);
+    color:var(--muted); border-radius:12px; padding:.75rem .5rem;
+    font:inherit; font-weight:600; cursor:pointer; font-size:.92rem;
+  }
+  .switch button[aria-pressed="true"]{
+    background:var(--accent); color:#fff; border-color:var(--accent);
+  }
+
+  .views{display:grid; gap:clamp(1.25rem,3vw,2rem)}
+  .view h3{margin:0 0 .25rem; font-size:1.05rem}
+  .view p{margin:0 0 1rem; color:var(--muted); font-size:.92rem}
+
+  .phone{
+    background:#1b1512; border-radius:32px; padding:10px;
+    box-shadow:0 20px 45px -22px rgba(20,17,14,.55);
+    max-width:330px; margin-inline:auto;
+  }
+  .phone img{
+    display:block; width:100%; height:auto; border-radius:24px;
+    background:var(--bg);
+  }
+  .shots{display:grid; grid-template-columns:1fr; gap:1rem}
+
+  @media (min-width:900px){
+    .switch{display:none}
+    .views{grid-template-columns:1fr 1fr; align-items:start}
+    .view{display:block !important}
+  }
+
+  /* --------------------------------------------------------- features */
+  .grid{display:grid; gap:1rem; grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+  .card{
+    background:var(--surface); border:1px solid var(--line);
+    border-radius:var(--radius); padding:1.25rem;
+  }
+  .card h3{margin:.1rem 0 .4rem; font-size:1.02rem}
+  .card p{margin:0; color:var(--muted); font-size:.92rem}
+  .card .ic{
+    width:36px; height:36px; border-radius:10px; background:var(--accent-soft);
+    color:var(--accent); display:grid; place-items:center; margin-bottom:.7rem;
+  }
+  .icon{width:20px; height:20px; stroke-width:1.9; fill:none; stroke:currentColor;
+        stroke-linecap:round; stroke-linejoin:round}
+
+  /* ------------------------------------------------------- highlight */
+  .why{
+    background:var(--surface); border:1px solid var(--line);
+    border-radius:var(--radius); padding:clamp(1.25rem,3vw,2rem);
+  }
+  .why ul{margin:0; padding-inline-start:1.1rem}
+  .why li{margin-bottom:.6rem}
+  .why li strong{font-weight:700}
+
+  /* ------------------------------------------------------- printing */
+  .paper{
+    background:#fff; border:1px solid var(--line); border-radius:12px;
+    padding:.75rem; max-width:260px;
+  }
+  .paper img{display:block; width:100%; height:auto; image-rendering:pixelated}
+
+  /* --------------------------------------------------------- contact */
+  .buy{
+    background:var(--accent); color:#fff; border-radius:var(--radius);
+    padding:clamp(1.5rem,4vw,2.5rem); text-align:center;
+  }
+  .buy h2{margin:0 0 .5rem}
+  .buy p{margin:0 0 1.4rem; opacity:.92}
+  .buy .btn-main{background:#fff; color:var(--accent)}
+
+  footer{padding:2.5rem 0 3.5rem; color:var(--muted); font-size:.88rem; text-align:center}
+
+  [hidden]{display:none !important}
+  :lang(en){letter-spacing:0}
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="wrap">
+    <div class="brand">
+      <span class="mark" aria-hidden="true">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M3 2v7c0 1.1.9 2 2 2h1a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg>
+      </span>
+      <span data-ar="منيو QR" data-en="QR Menu"></span>
+    </div>
+    <div class="spacer"></div>
+    <div class="langs" role="group" aria-label="Language">
+      <button id="lang-ar" aria-pressed="true">عربي</button>
+      <button id="lang-en" aria-pressed="false">EN</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="wrap hero">
+    <h1 data-ar="منيو و طلبات للمطاعم — على جوال المطعم، بدون انترنت"
+        data-en="A QR menu and ordering system that runs on the restaurant's own phone"></h1>
+    <p class="lede"
+       data-ar="الزبون بيمسح الكود من على الطاولة، بيشوف المنيو، و بيرسل طلبه. الكابتن بيستلمه على جواله و بيطبعه للمطبخ. ما في سيرفر، ما في اشتراك شهري، و ما في حاجة لانترنت."
+       data-en="The guest scans the code on the table, reads the menu, and sends an order. The captain receives it on his phone and prints it for the kitchen. No server, no monthly subscription, and no internet needed."></p>
+    <div class="cta">
+      <a class="btn btn-main" href="https://wa.me/972598805952" target="_blank" rel="noopener">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.5 8.5 0 0 1-4-1L3 21l2.1-4.9A8.4 8.4 0 0 1 12.6 3a8.4 8.4 0 0 1 8.4 8.5Z"/></svg>
+        <span data-ar="للشراء — واتساب" data-en="Buy — WhatsApp"></span>
+      </a>
+      <a class="btn btn-ghost" href="#views">
+        <span data-ar="شوف الشاشات" data-en="See the screens"></span>
+      </a>
+    </div>
+    <div class="tagline">
+      <span class="pill" data-ar="بدون انترنت" data-en="Works offline"></span>
+      <span class="pill" data-ar="عربي و انجليزي" data-en="Arabic &amp; English"></span>
+      <span class="pill" data-ar="طباعة للمطبخ" data-en="Kitchen printing"></span>
+      <span class="pill" data-ar="ما في اشتراك" data-en="No subscription"></span>
+    </div>
+  </div>
+
+  <!-- ================================================= the two views -->
+  <section id="views" class="wrap">
+    <h2 data-ar="الشاشتين" data-en="The two sides"></h2>
+    <p class="sub"
+       data-ar="واحدة بيد الزبون، و وحدة بيد الكابتن. الاثنين من نفس الجوال."
+       data-en="One in the guest's hand, one in the captain's. Both served by the same phone."></p>
+
+    <div class="switch" role="group">
+      <button id="tab-menu" aria-pressed="true" data-ar="شاشة الزبون" data-en="Menu view"></button>
+      <button id="tab-app" aria-pressed="false" data-ar="شاشة الكابتن" data-en="App view"></button>
+    </div>
+
+    <div class="views">
+      <div class="view" id="view-menu">
+        <h3 data-ar="شاشة الزبون — Menu view" data-en="Menu view"></h3>
+        <p data-ar="بتفتح بمسح الكود. بلا تحميل تطبيق و بلا تسجيل."
+           data-en="Opens from the QR code. No app to install, no sign-up."></p>
+        <div class="shots">
+          <div class="phone"><img src="img/shot-2-menu.png" alt="" loading="lazy" width="1080" height="2100"></div>
+          <div class="phone"><img src="img/shot-5-menu-bill.png" alt="" loading="lazy" width="1080" height="2100"></div>
+        </div>
+      </div>
+
+      <div class="view" id="view-app" hidden>
+        <h3 data-ar="شاشة الكابتن — App view" data-en="App view"></h3>
+        <p data-ar="الطلبات بتوصل هون، و منها بتتأكد و بتنطبع للمطبخ."
+           data-en="Orders land here, get confirmed, and print to the kitchen."></p>
+        <div class="shots">
+          <div class="phone"><img src="img/shot-3-captain.png" alt="" loading="lazy" width="1080" height="2100"></div>
+          <div class="phone"><img src="img/shot-4-admin.png" alt="" loading="lazy" width="1080" height="2100"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================================================== how it runs -->
+  <section class="wrap">
+    <h2 data-ar="كيف بتشتغل" data-en="How it works"></h2>
+    <p class="sub"
+       data-ar="ثلاث خطوات، و ما في وحدة منهم بتحتاج انترنت."
+       data-en="Three steps, and not one of them needs internet."></p>
+    <div class="grid">
+      <div class="card">
+        <div class="ic"><svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM19 19h2v2h-2z"/></svg></div>
+        <h3 data-ar="١ — الكود على الطاولة" data-en="1 — The code on the table"></h3>
+        <p data-ar="التطبيق بيطبعلك كود لكل طاولة، جاهز للصق. و مكتوب عليه العنوان كمان، للي ما عنده ماسح."
+           data-en="The app prints a card per table, ready to stick down. The address is printed in words too, for a phone with no scanner."></p>
+      </div>
+      <div class="card">
+        <div class="ic"><svg class="icon" viewBox="0 0 24 24"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg></div>
+        <h3 data-ar="٢ — الزبون بيطلب" data-en="2 — The guest orders"></h3>
+        <p data-ar="بيختار من المنيو، بيكتب اسمه، و بيبعت. و بيقدر يزيد على طلبه بعدين بدون ما يبلّش من جديد."
+           data-en="They pick from the menu, give a name, and send. They can add to an open order later without starting again."></p>
+      </div>
+      <div class="card">
+        <div class="ic"><svg class="icon" viewBox="0 0 24 24"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg></div>
+        <h3 data-ar="٣ — الكابتن و المطبخ" data-en="3 — Captain and kitchen"></h3>
+        <p data-ar="الكابتن بيشوف الطلب و بيأكده، فبينطبع بالمحطة الصح — مشاوي عند المشاوي، مشروبات عند المشروبات."
+           data-en="The captain confirms it and it prints at the right station — grills to the grill, drinks to the bar."></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================================================== what you get -->
+  <section class="wrap">
+    <h2 data-ar="شو فيه" data-en="What's in it"></h2>
+    <div class="grid">
+      <div class="card">
+        <h3 data-ar="منيو بصور و اقسام" data-en="Menu with photos and sections"></h3>
+        <p data-ar="اصناف، اقسام، اسعار، و صور. و زر واحد بيخفي صنف خلص من المطبخ."
+           data-en="Items, sections, prices and photos. One tap hides a dish the kitchen has run out of."></p>
+      </div>
+      <div class="card">
+        <h3 data-ar="حساب الطاولة" data-en="Table bill"></h3>
+        <p data-ar="كل طلبات الطاولة بحساب واحد، و بينطبع عند الكاشير. الاسعار قروش صحيحة — ما في فرق قرش بآخر الليلة."
+           data-en="Every order on a table lands on one bill, printed at the till. Money is handled in whole minor units, so the night's total reconciles exactly."></p>
+      </div>
+      <div class="card">
+        <h3 data-ar="نداء الجرسون" data-en="Call the waiter"></h3>
+        <p data-ar="زر بيرنّ على شاشة الكابتن، بدل ما الزبون يلوّح بايده."
+           data-en="A button that rings on the captain's screen, instead of waving across the room."></p>
+      </div>
+      <div class="card">
+        <h3 data-ar="عدّاد للتحضير" data-en="A countdown per order"></h3>
+        <p data-ar="كل طلب بيبلّش يعدّ من وقت التأكيد، فالكابتن بيشوف مين تأخر قبل ما الزبون يسأل."
+           data-en="Each order counts down from the moment it is confirmed, so a late table is visible before the guest asks."></p>
+      </div>
+      <div class="card">
+        <h3 data-ar="تقرير اليوم" data-en="The day's report"></h3>
+        <p data-ar="كم انباع و شو انباع، و الرقم بيطابق الي بالصندوق."
+           data-en="What sold and how much, with a figure that matches the cash drawer."></p>
+      </div>
+      <div class="card">
+        <h3 data-ar="نسخة احتياطية" data-en="Backups"></h3>
+        <p data-ar="ملف واحد فيه كل شي — المنيو و الصور و الطلبات — بتحفظه و بترجّعه وقت ما بدك."
+           data-en="One file with everything — menu, photos and orders — saved and restored whenever you want."></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================== printing -->
+  <section class="wrap">
+    <h2 data-ar="الطباعة" data-en="Printing"></h2>
+    <p class="sub"
+       data-ar="ورق المطبخ و حساب الكاشير، عربي مقروء و متّصل الحروف على طابعة حرارية عادية."
+       data-en="Kitchen tickets and the till bill, with properly shaped Arabic on an ordinary thermal printer."></p>
+    <div class="grid">
+      <div class="card">
+        <h3 data-ar="ورقة المطبخ" data-en="Kitchen ticket"></h3>
+        <div class="paper"><img src="img/print-1-ticket.png" alt="" loading="lazy"></div>
+      </div>
+      <div class="card">
+        <h3 data-ar="حساب الطاولة" data-en="Table bill"></h3>
+        <div class="paper"><img src="img/print-4-bill.png" alt="" loading="lazy"></div>
+      </div>
+      <div class="card">
+        <h3 data-ar="اعداد المحطات" data-en="Station setup"></h3>
+        <div class="phone" style="max-width:220px"><img src="img/shot-6-printers.png" alt="" loading="lazy"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================== why it's different -->
+  <section class="wrap">
+    <div class="why">
+      <h2 data-ar="ليش هاد مختلف" data-en="Why this one is different"></h2>
+      <ul>
+        <li data-ar="<strong>ما بيحتاج انترنت.</strong> كل شي بيشتغل على واي فاي المطعم لحاله. انقطع النت؟ المطعم بيكمّل شغل."
+            data-en="<strong>No internet required.</strong> Everything runs on the restaurant's own WiFi. The line goes down and service carries on."></li>
+        <li data-ar="<strong>ما في سيرفر و لا اشتراك.</strong> التطبيق نفسه هو السيرفر. ما في فاتورة شهرية و ما في حدا بتعتمد عليه."
+            data-en="<strong>No server, no subscription.</strong> The app is the server. No monthly bill and nobody to depend on."></li>
+        <li data-ar="<strong>عربي من الاساس.</strong> الشاشات و الورق كلهم عربي مضبوط، مو ترجمة ملزوقة على تصميم انجليزي."
+            data-en="<strong>Arabic first.</strong> Screens and paper are properly Arabic, not a translation pasted over an English layout."></li>
+        <li data-ar="<strong>جوال واحد بيكفّي.</strong> ما بدك اجهزة و لا كمبيوتر — جوال الكابتن و الطابعة و خلص."
+            data-en="<strong>One phone is enough.</strong> No terminals and no computer — the captain's phone and a printer."></li>
+        <li data-ar="<strong>مفحوص على اندرويد حقيقي.</strong> اكثر من ٩٠ فحص بيشتغلوا على جهاز حقيقي مع كل تعديل، و منهم فحص بيمشي ليلة كاملة و بيتأكد انو المجموع بيطابق الصندوق."
+            data-en="<strong>Tested on real Android.</strong> Over ninety tests run on a real device on every change, including one that plays out a whole evening and checks the night's total against the drawer."></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ========================================================= contact -->
+  <section class="wrap">
+    <div class="buy">
+      <h2 data-ar="بدك تشتريه؟" data-en="Want to buy it?"></h2>
+      <p data-ar="تواصل معي على واتساب و بحكيلك كل التفاصيل."
+         data-en="Message me on WhatsApp and I'll walk you through it."></p>
+      <a class="btn btn-main" href="https://wa.me/972598805952" target="_blank" rel="noopener">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.5 8.5 0 0 1-4-1L3 21l2.1-4.9A8.4 8.4 0 0 1 12.6 3a8.4 8.4 0 0 1 8.4 8.5Z"/></svg>
+        <span dir="ltr">+972 59 880 5952</span>
+      </a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p data-ar="الصور من الشاشات الحقيقية للتطبيق، مأخوذة اثناء الفحص على جهاز اندرويد."
+       data-en="Screenshots are of the real app, captured during testing on an Android device."></p>
+  </div>
+</footer>
+
+<script>
+// ------------------------------------------------------------- language
+// Both languages live in the markup; the switch swaps which one is shown.
+// A visitor from GitHub reads English, a restaurant owner here reads Arabic,
+// and neither should meet the other's copy first.
+(function () {
+  var nodes = document.querySelectorAll('[data-ar]');
+  var arBtn = document.getElementById('lang-ar');
+  var enBtn = document.getElementById('lang-en');
+
+  function apply(lang) {
+    var rtl = lang === 'ar';
+    document.documentElement.lang = lang;
+    document.documentElement.dir = rtl ? 'rtl' : 'ltr';
+    nodes.forEach(function (n) {
+      n.innerHTML = n.getAttribute(rtl ? 'data-ar' : 'data-en') || '';
+    });
+    arBtn.setAttribute('aria-pressed', String(rtl));
+    enBtn.setAttribute('aria-pressed', String(!rtl));
+    try { localStorage.setItem('qrm.site.lang', lang); } catch (e) { /* private mode */ }
+  }
+
+  arBtn.onclick = function () { apply('ar'); };
+  enBtn.onclick = function () { apply('en'); };
+
+  var saved = null;
+  try { saved = localStorage.getItem('qrm.site.lang'); } catch (e) { /* ignore */ }
+  // A visitor arriving from GitHub is most likely reading English; one
+  // arriving from here is not. Follow the browser, and remember a choice.
+  var prefersArabic = (navigator.language || '').toLowerCase().indexOf('ar') === 0;
+  apply(saved || (prefersArabic ? 'ar' : 'en'));
+})();
+
+// ---------------------------------------------------------- the views
+// On a narrow screen the two views would become a very long scroll, so only
+// one is shown and the pair is switched from the top. Wide screens show both
+// side by side and the switch is hidden by CSS - which is why this also
+// un-hides both when the layout is wide, or a visitor who switched on a
+// phone and then rotated would be left with one empty column.
+(function () {
+  var menuBtn = document.getElementById('tab-menu');
+  var appBtn = document.getElementById('tab-app');
+  var menu = document.getElementById('view-menu');
+  var app = document.getElementById('view-app');
+  var wide = window.matchMedia('(min-width: 900px)');
+
+  function show(which) {
+    if (wide.matches) { menu.hidden = false; app.hidden = false; return; }
+    menu.hidden = which !== 'menu';
+    app.hidden = which !== 'app';
+    menuBtn.setAttribute('aria-pressed', String(which === 'menu'));
+    appBtn.setAttribute('aria-pressed', String(which === 'app'));
+  }
+
+  menuBtn.onclick = function () { show('menu'); };
+  appBtn.onclick = function () { show('app'); };
+  wide.addEventListener('change', function () {
+    show(appBtn.getAttribute('aria-pressed') === 'true' ? 'app' : 'menu');
+  });
+  show('menu');
+})();
+</script>
+</body>
+</html>
