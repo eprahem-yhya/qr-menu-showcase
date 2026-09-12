@@ -34,6 +34,12 @@ nobody: the restaurant owns the phone, the data and the app.
 
 ## What's included
 
+**In Arabic or English**
+- The owner picks the language when setting up, and every screen follows -
+  the menu, the captain's screen, the management screens, the messages, and
+  the printed tickets and cards
+- A guest can still switch the menu to the other language for themselves
+
 **For the guest**
 - Menu with sections, photos, prices, and Arabic/English
 - Order from the table, and add to an order already open
@@ -66,7 +72,11 @@ nobody: the restaurant owns the phone, the data and the app.
 
 - One Android phone (Android 7 or newer) that stays on a charger
 - The restaurant's WiFi
-- Optionally, one or more ESC/POS thermal printers on that WiFi
+
+That is the whole list. Printers are **optional**: connect one or more ESC/POS
+thermal printers to the same WiFi and orders print themselves at the right
+station, or run without any and the captain reads each order off his screen
+and tells the kitchen. Nothing else changes either way.
 
 No computer. No internet. No monthly bill.
 
@@ -85,6 +95,12 @@ Kitchen ticket and till bill, on 80mm thermal paper:
 ![Bill](img/print-4-bill.png)
 
 ## Buying it
+
+**Try it first.** A new copy runs in full for four days - put your own menu
+in, work a real evening on it, and decide on what you saw rather than on the
+pictures above. After that it asks for an unlock code, which is what you are
+buying. Nobody has to pay a stranger first, and nothing has to be handed over
+on trust.
 
 The app is sold as a finished product, installed and activated for your
 restaurant. Get in touch and I'll walk you through it:

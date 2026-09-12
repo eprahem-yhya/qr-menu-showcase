@@ -199,7 +199,8 @@
     <div class="tagline">
       <span class="pill" data-ar="بدون انترنت" data-en="Works offline"></span>
       <span class="pill" data-ar="عربي و انجليزي" data-en="Arabic &amp; English"></span>
-      <span class="pill" data-ar="طباعة للمطبخ" data-en="Kitchen printing"></span>
+      <span class="pill" data-ar="جرّبه ٤ ايام" data-en="Four-day trial"></span>
+      <span class="pill" data-ar="طباعة للمطبخ (اختيارية)" data-en="Kitchen printing (optional)"></span>
       <span class="pill" data-ar="ما في اشتراك" data-en="No subscription"></span>
     </div>
   </div>
@@ -222,8 +223,8 @@
         <p data-ar="بتفتح بمسح الكود. بلا تحميل تطبيق و بلا تسجيل."
            data-en="Opens from the QR code. No app to install, no sign-up."></p>
         <div class="shots">
-          <div class="phone"><img src="img/shot-2-menu.png" alt="" loading="lazy" width="1080" height="2100"></div>
-          <div class="phone"><img src="img/shot-5-menu-bill.png" alt="" loading="lazy" width="1080" height="2100"></div>
+          <div class="phone"><img src="img/shot-2-menu.png" data-ar="img/shot-2-menu.png" data-en="img/shot-en-2-menu.png" alt="" loading="lazy" width="1080" height="2100"></div>
+          <div class="phone"><img src="img/shot-5-menu-bill.png" data-ar="img/shot-5-menu-bill.png" data-en="img/shot-en-5-menu-bill.png" alt="" loading="lazy" width="1080" height="2100"></div>
         </div>
       </div>
 
@@ -232,8 +233,8 @@
         <p data-ar="الطلبات بتوصل هون، و منها بتتأكد و بتنطبع للمطبخ."
            data-en="Orders land here, get confirmed, and print to the kitchen."></p>
         <div class="shots">
-          <div class="phone"><img src="img/shot-3-captain.png" alt="" loading="lazy" width="1080" height="2100"></div>
-          <div class="phone"><img src="img/shot-4-admin.png" alt="" loading="lazy" width="1080" height="2100"></div>
+          <div class="phone"><img src="img/shot-3-captain.png" data-ar="img/shot-3-captain.png" data-en="img/shot-en-3-captain.png" alt="" loading="lazy" width="1080" height="2100"></div>
+          <div class="phone"><img src="img/shot-4-admin.png" data-ar="img/shot-4-admin.png" data-en="img/shot-en-4-admin.png" alt="" loading="lazy" width="1080" height="2100"></div>
         </div>
       </div>
     </div>
@@ -306,10 +307,10 @@
 
   <!-- ======================================================== printing -->
   <section class="wrap">
-    <h2 data-ar="الطباعة" data-en="Printing"></h2>
+    <h2 data-ar="الطباعة — اختيارية" data-en="Printing — optional"></h2>
     <p class="sub"
-       data-ar="ورق المطبخ و حساب الكاشير، عربي مقروء و متّصل الحروف على طابعة حرارية عادية."
-       data-en="Kitchen tickets and the till bill, with properly shaped Arabic on an ordinary thermal printer."></p>
+       data-ar="ورق المطبخ و حساب الكاشير، عربي مقروء و متّصل الحروف على طابعة حرارية عادية. و اذا ما عندك طابعة، التطبيق بيشتغل عادي — الكابتن بيقرا الطلبات من شاشته و بيبلّغ المطبخ."
+       data-en="Kitchen tickets and the till bill, with properly shaped Arabic on an ordinary thermal printer. And with no printer at all the app works exactly the same — the captain reads the orders off his screen and tells the kitchen."></p>
     <div class="grid">
       <div class="card">
         <h3 data-ar="ورقة المطبخ" data-en="Kitchen ticket"></h3>
@@ -321,7 +322,7 @@
       </div>
       <div class="card">
         <h3 data-ar="اعداد المحطات" data-en="Station setup"></h3>
-        <div class="phone" style="max-width:220px"><img src="img/shot-6-printers.png" alt="" loading="lazy"></div>
+        <div class="phone" style="max-width:220px"><img src="img/shot-6-printers.png" data-ar="img/shot-6-printers.png" data-en="img/shot-en-6-printers.png" alt="" loading="lazy"></div>
       </div>
     </div>
   </section>
@@ -349,6 +350,8 @@
   <section class="wrap">
     <div class="buy">
       <h2 data-ar="بدك تشتريه؟" data-en="Want to buy it?"></h2>
+      <p data-ar="جرّبه ٤ ايام كاملة بمطعمك قبل ما تدفع — حط منيوك و اشتغل ليلة حقيقية، و بعدها قرّر."
+         data-en="Try it in your own restaurant for four days before paying — put your menu in, work a real evening, then decide."></p>
       <p data-ar="تواصل معي على واتساب و بحكيلك كل التفاصيل."
          data-en="Message me on WhatsApp and I'll walk you through it."></p>
       <a class="btn btn-main" href="https://wa.me/972598805952" target="_blank" rel="noopener">
@@ -372,7 +375,8 @@
 // A visitor from GitHub reads English, a restaurant owner here reads Arabic,
 // and neither should meet the other's copy first.
 (function () {
-  var nodes = document.querySelectorAll('[data-ar]');
+  var nodes = document.querySelectorAll('[data-ar]:not(img)');
+  var shots = document.querySelectorAll('img[data-en]');
   var arBtn = document.getElementById('lang-ar');
   var enBtn = document.getElementById('lang-en');
 
@@ -382,6 +386,13 @@
     document.documentElement.dir = rtl ? 'rtl' : 'ltr';
     nodes.forEach(function (n) {
       n.innerHTML = n.getAttribute(rtl ? 'data-ar' : 'data-en') || '';
+    });
+    // The screens themselves change language too. An English visitor shown
+    // Arabic screenshots concludes the product is not for them, and they
+    // would be reading the pictures correctly.
+    shots.forEach(function (img) {
+      var want = img.getAttribute(rtl ? 'data-ar' : 'data-en');
+      if (want && img.getAttribute('src') !== want) img.setAttribute('src', want);
     });
     arBtn.setAttribute('aria-pressed', String(rtl));
     enBtn.setAttribute('aria-pressed', String(!rtl));
