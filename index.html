@@ -101,6 +101,8 @@
   @media (min-width:900px){
     .switch{display:none}
     .views{grid-template-columns:1fr 1fr; align-items:start}
+    #view-cashier{grid-column:1 / -1}
+    #view-cashier .shots{max-width:340px; margin-inline:auto}
     .view{display:block !important}
   }
 
@@ -207,14 +209,15 @@
 
   <!-- ================================================= the two views -->
   <section id="views" class="wrap">
-    <h2 data-ar="الشاشتين" data-en="The two sides"></h2>
+    <h2 data-ar="الشاشات الثلاث" data-en="The three screens"></h2>
     <p class="sub"
-       data-ar="واحدة بيد الزبون، و وحدة بيد الكابتن. الاثنين من نفس الجوال."
-       data-en="One in the guest's hand, one in the captain's. Both served by the same phone."></p>
+       data-ar="وحدة بيد الزبون، و وحدة بيد الكابتن، و وحدة عند الكاشير. كلهن من نفس الجوال."
+       data-en="One in the guest's hand, one in the captain's, one at the till. All served by the same phone."></p>
 
     <div class="switch" role="group">
       <button id="tab-menu" aria-pressed="true" data-ar="شاشة الزبون" data-en="Menu view"></button>
       <button id="tab-app" aria-pressed="false" data-ar="شاشة الكابتن" data-en="App view"></button>
+      <button id="tab-cashier" aria-pressed="false" data-ar="شاشة الكاشير" data-en="Cashier view"></button>
     </div>
 
     <div class="views">
@@ -235,6 +238,15 @@
         <div class="shots">
           <div class="phone"><img src="img/shot-3-captain.png" data-ar="img/shot-3-captain.png" data-en="img/shot-en-3-captain.png" alt="" loading="lazy" width="1080" height="2100"></div>
           <div class="phone"><img src="img/shot-4-admin.png" data-ar="img/shot-4-admin.png" data-en="img/shot-en-4-admin.png" alt="" loading="lazy" width="1080" height="2100"></div>
+        </div>
+      </div>
+
+      <div class="view" id="view-cashier" hidden>
+        <h3 data-ar="شاشة الكاشير — Cashier view" data-en="Cashier view"></h3>
+        <p data-ar="بيفتحها الكاشير من كمبيوترو أو جوالو على واي فاي المطعم، و ما بيشوف غير الطاولات الي عليها حساب — و بضغطة بيسكّر الطاولة."
+           data-en="Opened from the cashier's own computer or phone on the restaurant's WiFi. It shows only the tables that owe something, and settles one with a tap."></p>
+        <div class="shots">
+          <div class="phone"><img src="img/shot-8-cashier.png" data-ar="img/shot-8-cashier.png" data-en="img/shot-en-8-cashier.png" alt="" loading="lazy" width="1080" height="2100"></div>
         </div>
       </div>
     </div>
@@ -417,25 +429,30 @@
 // un-hides both when the layout is wide, or a visitor who switched on a
 // phone and then rotated would be left with one empty column.
 (function () {
-  var menuBtn = document.getElementById('tab-menu');
-  var appBtn = document.getElementById('tab-app');
-  var menu = document.getElementById('view-menu');
-  var app = document.getElementById('view-app');
+  // Driven from a list rather than a pair of variables: a third screen was
+  // added and every line that named both by hand had to be found and changed.
+  // The next one is one entry.
+  var names = ['menu', 'app', 'cashier'];
+  var tabs = {}, views = {};
+  names.forEach(function (n) {
+    tabs[n] = document.getElementById('tab-' + n);
+    views[n] = document.getElementById('view-' + n);
+  });
   var wide = window.matchMedia('(min-width: 900px)');
+  var current = 'menu';
 
   function show(which) {
-    if (wide.matches) { menu.hidden = false; app.hidden = false; return; }
-    menu.hidden = which !== 'menu';
-    app.hidden = which !== 'app';
-    menuBtn.setAttribute('aria-pressed', String(which === 'menu'));
-    appBtn.setAttribute('aria-pressed', String(which === 'app'));
+    current = which;
+    names.forEach(function (n) {
+      views[n].hidden = wide.matches ? false : (n !== which);
+      tabs[n].setAttribute('aria-pressed', String(n === which));
+    });
   }
 
-  menuBtn.onclick = function () { show('menu'); };
-  appBtn.onclick = function () { show('app'); };
-  wide.addEventListener('change', function () {
-    show(appBtn.getAttribute('aria-pressed') === 'true' ? 'app' : 'menu');
+  names.forEach(function (n) {
+    tabs[n].onclick = function () { show(n); };
   });
+  wide.addEventListener('change', function () { show(current); });
   show('menu');
 })();
 </script>
