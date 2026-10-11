@@ -105,7 +105,7 @@ on trust.
 The app is sold as a finished product, installed and activated for your
 restaurant. Get in touch and I'll walk you through it:
 
-**WhatsApp: [+972 59 880 5952](https://wa.me/972598805952)**
+**WhatsApp: [+970 59 744 8626](https://wa.me/970597448626)**
 
 Please say which restaurant it is for and how many tables, and I'll tell you
 what it costs and how quickly it can be running.
